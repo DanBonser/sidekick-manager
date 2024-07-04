@@ -1,0 +1,10 @@
+{{! This template extends the NPC sheet to include the sidekick level dropdown }}
+{{> systems/dnd5e/templates/actors/npc-sheet.html}}
+<div class="form-group">
+    <label>Sidekick Level:</label>
+    <select class="sidekick-level">
+        {{#each (range 1 21)}}
+        <option value="{{this}}" {{#if (eq this ../data.sidekickLevels)}}selected{{/if}}>{{this}}</option>
+        {{/each}}
+    </select>
+</div>
