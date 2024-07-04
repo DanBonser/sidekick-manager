@@ -1,15 +1,6 @@
 {
   "name": "sidekick-manager",
   "title": "Sidekick Manager",
-  "description": "A module to manage sidekicks in Foundry VTT",
   "version": "1.0.0",
-  "author": "Dan Bonser",
-  "esmodules": ["scripts/sidekick-manager.js"],
-  "styles": ["styles/sidekick-manager.css"],
-  "packs": [],
-  "dependencies": [],
-  "compatibility": {
-    "minimum": "0.7.5",
-    "verified": "0.7.5"
-  }
+  "author": "Dan Bonser"
 }
