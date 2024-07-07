@@ -1,4 +1,4 @@
-Hooks.on('init', () => {
+Hooks.once('init', () => {
     game.settings.register("sidekick-manager", "sidekickLevels", {
         name: "Sidekick Levels",
         scope: "world",
@@ -7,6 +7,7 @@ Hooks.on('init', () => {
         default: {}
     });
 
+    // Register the custom sheet for NPCs
     Actors.registerSheet("dnd5e", SidekickActorSheet, {
         types: ["npc"],
         makeDefault: false
@@ -41,20 +42,20 @@ class SidekickActorSheet extends ActorSheet5eNPC {
         const updates = {};  // Object to store updates
         // Example for level 1
         if (level === 1) {
-            updates['data.abilities.str.value'] = 10;
-            updates['data.abilities.dex.value'] = 15;
-            updates['data.abilities.con.value'] = 12;
-            updates['data.abilities.int.value'] = 13;
-            updates['data.abilities.wis.value'] = 10;
-            updates['data.abilities.cha.value'] = 14;
-            updates['data.skills.acr.value'] = 4;
-            updates['data.skills.prf.value'] = 4;
-            updates['data.skills.per.value'] = 4;
-            updates['data.skills.slt.value'] = 4;
-            updates['data.skills.ste.value'] = 4;
-            updates['data.attributes.hp.value'] = 11;
-            updates['data.attributes.hp.max'] = 11;
-            updates['data.attributes.ac.value'] = 14;
+            updates['system.abilities.str.value'] = 10;
+            updates['system.abilities.dex.value'] = 15;
+            updates['system.abilities.con.value'] = 12;
+            updates['system.abilities.int.value'] = 13;
+            updates['system.abilities.wis.value'] = 10;
+            updates['system.abilities.cha.value'] = 14;
+            updates['system.skills.acr.value'] = 4;
+            updates['system.skills.prf.value'] = 4;
+            updates['system.skills.per.value'] = 4;
+            updates['system.skills.slt.value'] = 4;
+            updates['system.skills.ste.value'] = 4;
+            updates['system.attributes.hp.value'] = 11;
+            updates['system.attributes.hp.max'] = 11;
+            updates['system.attributes.ac.value'] = 14;
         }
         // Add more level-based updates here
 
