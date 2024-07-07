@@ -1,28 +1,24 @@
-// Hook to initialize the module
 Hooks.on('init', () => {
     // Define the new actor type
-    CONFIG.Actor.entityClass = SidekickActor;
-
-    // Register the new actor type
-    Actors.unregisterSheet("dnd5e", ActorSheet5eCharacter);
-    Actors.registerSheet("dnd5e", SidekickActorSheet, {
-        types: ["character"],
-        makeDefault: false
-    });
+    CONFIG.Actor.documentClass = SidekickActor;
 
     // Add "Sidekick" to the actor type dropdown
     CONFIG.Actor.typeLabels = {
         ...CONFIG.Actor.typeLabels,
         "sidekick": "Sidekick"
     };
+
+    // Register the new actor type
+    Actors.registerSheet("dnd5e", SidekickActorSheet, {
+        types: ["sidekick"],
+        makeDefault: false
+    });
 });
 
-// Define the new SidekickActor class
 class SidekickActor extends Actor {
     // Override any necessary methods here
 }
 
-// Extend the default actor sheet to include the sidekick level dropdown
 class SidekickActorSheet extends ActorSheet5eCharacter {
     getData() {
         const data = super.getData();
