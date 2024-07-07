@@ -1,27 +1,59 @@
-Hooks.on('init', () => {
-    // Register the new actor type by extending the Actor class
-    CONFIG.Actor.documentClass = SidekickActor;
-
-    // Add "Sidekick" to the actor type dropdown
-    CONFIG.Actor.typeLabels = {
-        ...CONFIG.Actor.typeLabels,
-        "sidekick": "Sidekick"
-    };
+// Register the custom sheet
+Hooks.once('init', () => {
+    Actors.registerSheet("dnd5e", SidekickActorSheet, {
+        types: ["npc"],
+        makeDefault: false
+    });
 });
 
-// Define the new SidekickActor class
-class SidekickActor extends Actor {
-    // You can override necessary methods here, for now, we'll keep it simple
-}
+// Define the custom SidekickActorSheet class
+class SidekickActorSheet extends ActorSheet5eNPC {
+    getData() {
+        const data = super.getData();
+        const sidekickLevels = game.settings.get("sidekick-manager", "sidekickLevels") || {};
+        data.sidekickLevels = sidekickLevels[data.actor._id] || 1;
+        return data;
+    }
 
-// Register the new sheet for the "sidekick" type
-Actors.registerSheet("dnd5e", SidekickActorSheet, {
-    types: ["sidekick"],
-    makeDefault: false
-});
+    activateListeners(html) {
+        super.activateListeners(html);
+        html.find(".sidekick-level").change(this._onSidekickLevelChange.bind(this));
+    }
 
-// Define a simple SidekickActorSheet class
-class SidekickActorSheet extends ActorSheet5eCharacter {
+    async _onSidekickLevelChange(event) {
+        const newLevel = parseInt(event.target.value);
+        const actorId = this.actor.id;
+        const sidekickLevels = game.settings.get("sidekick-manager", "sidekickLevels") || {};
+        sidekickLevels[actorId] = newLevel;
+        await game.settings.set("sidekick-manager", "sidekickLevels", sidekickLevels);
+
+        // Update the actor stats based on the new level
+        await this._updateActorStats(newLevel);
+    }
+
+    async _updateActorStats(level) {
+        const updates = {};  // Object to store updates
+        // Define changes based on level and class
+        // Example for level 1
+        if (level === 1) {
+            updates['data.abilities.str.value'] = 10;
+            updates['data.abilities.dex.value'] = 15;
+            updates['data.abilities.con.value'] = 12;
+            updates['data.abilities.int.value'] = 13;
+            updates['data.abilities.wis.value'] = 10;
+            updates['data.abilities.cha.value'] = 14;
+            updates['data.skills.acr.value'] = 4;
+            updates['data.skills.prf.value'] = 4;
+            updates['data.skills.per.value'] = 4;
+            updates['data.skills.slt.value'] = 4;
+            updates['data.skills.ste.value'] = 4;
+            updates['data.attributes.hp.value'] = 11;
+            updates['data.attributes.hp.max'] = 11;
+            updates['data.attributes.ac.value'] = 14;
+        }
+        await this.actor.update(updates);
+    }
+
     static get defaultOptions() {
         const options = super.defaultOptions;
         options.classes = [...options.classes, "sidekick-manager"];
