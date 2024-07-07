@@ -1,21 +1,29 @@
-Hooks.on('ready', () => {
-    // Register the setting for sidekick levels
-    game.settings.register("sidekick-manager", "sidekickLevels", {
-        name: "Sidekick Levels",
-        scope: "world",
-        config: false,
-        type: Object,
-        default: {}
-    });
+// Hook to initialize the module
+Hooks.on('init', () => {
+    // Define the new actor type
+    CONFIG.Actor.entityClass = SidekickActor;
 
-    // Extend the actor sheet to include the dropdown for level selection
-    Actors.registerSheet("dnd5e", SidekickSheet, {
-        types: ["npc"],
+    // Register the new actor type
+    Actors.unregisterSheet("dnd5e", ActorSheet5eCharacter);
+    Actors.registerSheet("dnd5e", SidekickActorSheet, {
+        types: ["character"],
         makeDefault: false
     });
+
+    // Add "Sidekick" to the actor type dropdown
+    CONFIG.Actor.typeLabels = {
+        ...CONFIG.Actor.typeLabels,
+        "sidekick": "Sidekick"
+    };
 });
 
-class SidekickSheet extends ActorSheet5eNPC {
+// Define the new SidekickActor class
+class SidekickActor extends Actor {
+    // Override any necessary methods here
+}
+
+// Extend the default actor sheet to include the sidekick level dropdown
+class SidekickActorSheet extends ActorSheet5eCharacter {
     getData() {
         const data = super.getData();
         const sidekickLevels = game.settings.get("sidekick-manager", "sidekickLevels");
