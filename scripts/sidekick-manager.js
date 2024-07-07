@@ -1,17 +1,23 @@
-// Register the custom sheet
-Hooks.once('init', () => {
+Hooks.on('init', () => {
+    game.settings.register("sidekick-manager", "sidekickLevels", {
+        name: "Sidekick Levels",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: {}
+    });
+
     Actors.registerSheet("dnd5e", SidekickActorSheet, {
         types: ["npc"],
         makeDefault: false
     });
 });
 
-// Define the custom SidekickActorSheet class
 class SidekickActorSheet extends ActorSheet5eNPC {
     getData() {
         const data = super.getData();
         const sidekickLevels = game.settings.get("sidekick-manager", "sidekickLevels") || {};
-        data.sidekickLevels = sidekickLevels[data.actor._id] || 1;
+        data.sidekickLevels = sidekickLevels[this.actor.id] || 1;
         return data;
     }
 
@@ -33,7 +39,6 @@ class SidekickActorSheet extends ActorSheet5eNPC {
 
     async _updateActorStats(level) {
         const updates = {};  // Object to store updates
-        // Define changes based on level and class
         // Example for level 1
         if (level === 1) {
             updates['data.abilities.str.value'] = 10;
@@ -51,6 +56,8 @@ class SidekickActorSheet extends ActorSheet5eNPC {
             updates['data.attributes.hp.max'] = 11;
             updates['data.attributes.ac.value'] = 14;
         }
+        // Add more level-based updates here
+
         await this.actor.update(updates);
     }
 
