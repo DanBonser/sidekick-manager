@@ -1,10 +1,6 @@
-{{! This template extends the NPC sheet to include the sidekick level dropdown }}
+<!-- sidekick-sheet.html -->
+{{! This template extends the character sheet to include a custom message }}
 {{> systems/dnd5e/templates/actors/character-sheet.html}}
 <div class="form-group">
-    <label>Sidekick Level:</label>
-    <select class="sidekick-level">
-        {{#each (range 1 21)}}
-        <option value="{{this}}" {{#if (eq this ../data.sidekickLevels)}}selected{{/if}}>{{this}}</option>
-        {{/each}}
-    </select>
+    <label>This is a Sidekick Actor Sheet</label>
 </div>
